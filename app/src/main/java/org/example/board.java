@@ -1,9 +1,9 @@
 package org.example;
 
-public class board {
+public class Board {
     private final char[] cells = new char[9];
 
-    public board() {
+    public Board() {
         reset();
     }
 

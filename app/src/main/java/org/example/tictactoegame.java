@@ -2,32 +2,55 @@ package org.example;
 
 import java.util.Scanner;
 
-public class tictactoegame {
-    private final board board;
+public class TicTacToeGame {
+    private final Board board;
     private char currentPlayer;
     private final Scanner scanner;
+    private final GameLog gameLog;
 
-    public tictactoegame() {
-        board = new board();
+    public TicTacToeGame() {
+        board = new Board();
         currentPlayer = 'X';
         scanner = new Scanner(System.in);
+        gameLog = new GameLog();
+    }
+
+    public GameLog getGameLog() {
+        return gameLog;
     }
 
     public void play() {
         System.out.println("Welcome to Tic-Tac-Toe!");
 
+        char lastLoser = ' ';
         boolean playAgain;
+
         do {
             board.reset();
-            currentPlayer = 'X';
-            playSingleGame();
+            if (lastLoser == 'X' || lastLoser == 'O') {
+                currentPlayer = lastLoser;
+                System.out.println("Player " + currentPlayer + " starts this game.");
+            } else {
+                currentPlayer = 'X';
+            }
+
+            char result = playSingleGame();
+            gameLog.recordWin(result);
+
+            if (result == 'X') lastLoser = 'O';
+            else if (result == 'O') lastLoser = 'X';
+            else lastLoser = ' ';
+
+            gameLog.printLog();
             playAgain = askReplay();
+
         } while (playAgain);
 
+        gameLog.saveToFile();
         System.out.println("Goodbye!");
     }
 
-    private void playSingleGame() {
+    private char playSingleGame() {
         while (true) {
             printBoard();
             int move = getPlayerMove();
@@ -36,11 +59,11 @@ public class tictactoegame {
             if (board.checkWin(currentPlayer)) {
                 printBoard();
                 System.out.println("Player " + currentPlayer + " wins!");
-                break;
+                return currentPlayer;
             } else if (board.isFull()) {
                 printBoard();
                 System.out.println("It's a draw!");
-                break;
+                return 'T';
             }
 
             currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';

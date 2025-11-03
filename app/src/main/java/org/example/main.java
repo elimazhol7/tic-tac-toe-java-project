@@ -1,8 +1,8 @@
 package org.example;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
-        tictactoegame game = new tictactoegame();
+        TicTacToeGame game = new TicTacToeGame();
         game.play();
     }
 }

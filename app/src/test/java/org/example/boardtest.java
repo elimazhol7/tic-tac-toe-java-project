@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class boardtest {
-    private board board;
+public class BoardTest {
+    private Board board;
 
     @BeforeEach
     public void setUp() {
-        board = new board();
+        board = new Board();
     }
 
     @Test
