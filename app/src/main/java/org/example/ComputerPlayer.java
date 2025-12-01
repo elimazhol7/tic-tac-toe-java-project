@@ -9,18 +9,18 @@ public class ComputerPlayer {
     public int chooseMove(Board board, char computer, int turnNumber) {
         char opponent = (computer == 'X') ? 'O' : 'X';
 
-        // RULE 1 — First move → corner
+        // RULE 1: First move, corner
         if (turnNumber == 0) {
             int[] corners = {0, 2, 6, 8};
             return corners[rand.nextInt(4)];
         }
 
-        // RULE 2 — Second move → center if empty
+        // RULE 2: Second move, center if empty
         if (turnNumber == 1 && board.isCellEmpty(4)) {
             return 4;
         }
 
-        // RULE 3 — Try to win
+        // RULE 3: Try to win
         for (int i = 0; i < 9; i++) {
             if (board.isCellEmpty(i)) {
                 board.forceSet(i, computer);
@@ -32,7 +32,7 @@ public class ComputerPlayer {
             }
         }
 
-        // RULE 4 — Block opponent
+        // RULE 4: Block opponent
         for (int i = 0; i < 9; i++) {
             if (board.isCellEmpty(i)) {
                 board.forceSet(i, opponent);
@@ -44,7 +44,7 @@ public class ComputerPlayer {
             }
         }
 
-        // RULE 5 — Random
+        // RULE 5: Random
         List<Integer> open = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             if (board.isCellEmpty(i)) open.add(i);
