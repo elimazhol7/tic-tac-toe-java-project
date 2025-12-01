@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,8 +13,8 @@ class TicTacToeGameTest {
     private TicTacToeGame createGameWithInput(String input) {
         InputStream stdin = System.in;
         System.setIn(new ByteArrayInputStream(input.getBytes()));
-        TicTacToeGame game = new TicTacToeGame();
-        return game;
+        Scanner scanner = new Scanner(System.in);
+        return new TicTacToeGame(scanner, GameModeSelector.Mode.HUMAN_VS_HUMAN);
     }
 
     @Test

@@ -7,12 +7,29 @@ public class TicTacToeGame {
     private char currentPlayer;
     private final Scanner scanner;
     private final GameLog gameLog;
+    private int turnNumber;
 
-    public TicTacToeGame() {
+
+    private final ComputerPlayer computerPlayer = new ComputerPlayer();
+    private GameModeSelector.Mode mode;
+    private char computerMark;
+ 
+
+    public TicTacToeGame(Scanner scanner, GameModeSelector.Mode forcedMode) {
         board = new Board();
         currentPlayer = 'X';
-        scanner = new Scanner(System.in);
+        this.scanner = scanner;
         gameLog = new GameLog();
+        this.mode = forcedMode;
+        
+        if (mode == GameModeSelector.Mode.HUMAN_VS_COMPUTER) {
+            computerMark = 'O';  // human is X, computer is O
+            } else if (mode == GameModeSelector.Mode.COMPUTER_VS_HUMAN) {
+                computerMark = 'X';  // computer is X, human is O
+            } else {
+                computerMark = ' ';  // no computer
+            }
+
     }
 
     public GameLog getGameLog() {
@@ -20,6 +37,21 @@ public class TicTacToeGame {
     }
 
     public void play() {
+        if (mode == null) {
+            GameModeSelector selector = new GameModeSelector(scanner);
+            mode = selector.chooseMode();
+            
+            if (mode == GameModeSelector.Mode.HUMAN_VS_COMPUTER) {
+                computerMark = 'O';  // human is X, computer is O
+                System.out.println("Great! You go first.");
+            } else if (mode == GameModeSelector.Mode.COMPUTER_VS_HUMAN) {
+                computerMark = 'X';  // computer is X, human is O
+                System.out.println("Great! The computer will go first.");
+            } else {
+                computerMark = ' '; // no computer
+            }
+        }
+
         System.out.println("Welcome to Tic-Tac-Toe!");
 
         char lastLoser = ' ';
@@ -48,25 +80,40 @@ public class TicTacToeGame {
 
         gameLog.saveToFile();
         System.out.println("Goodbye!");
-    }
+        }
 
     private char playSingleGame() {
+        turnNumber = 0;
         while (true) {
             printBoard();
-            int move = getPlayerMove();
+        
+            boolean computersTurn =
+                (mode == GameModeSelector.Mode.HUMAN_VS_COMPUTER && currentPlayer == computerMark) ||
+                (mode == GameModeSelector.Mode.COMPUTER_VS_HUMAN && currentPlayer == computerMark);
+
+            int move;
+
+            if (computersTurn) {
+                move = computerPlayer.chooseMove(board, currentPlayer, turnNumber) + 1;
+                System.out.println("Computer chooses: " + move);
+            } else {
+                move = getPlayerMove();
+            }
             board.setCell(move - 1, currentPlayer);
 
             if (board.checkWin(currentPlayer)) {
                 printBoard();
                 System.out.println("Player " + currentPlayer + " wins!");
                 return currentPlayer;
-            } else if (board.isFull()) {
+            }
+            
+            if (board.isFull()) {
                 printBoard();
                 System.out.println("It's a draw!");
                 return 'T';
             }
-
             currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+            turnNumber++;
         }
     }
 

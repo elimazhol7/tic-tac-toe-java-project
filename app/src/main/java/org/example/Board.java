@@ -13,6 +13,19 @@ public class Board {
         }
     }
 
+    public void forceSet(int index, char value) {
+        cells[index] = value;
+    }
+    
+    public void tempSet(int index, char symbol) {
+        cells[index] = symbol;
+    }
+
+    public void undo(int index) {
+        cells[index] = (char) ('1' + index);
+    }
+
+
     public boolean isCellEmpty(int index) {
         return cells[index] != 'X' && cells[index] != 'O';
     }

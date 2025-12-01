@@ -29,7 +29,7 @@ public class GameLog {
             writer.write(String.format("Player O Wins: %d%n", oWins));
             writer.write(String.format("Ties: %d%n", ties));
             writer.write("====================\n");
-            System.out.println("Writing the game log to disk. Please see game.txt for the final statistics!");
+            System.out.println("Writing the game log to file. Please see game.txt for the final stats!");
         } catch (IOException e) {
             System.out.println("Error writing game log to file: " + e.getMessage());
         }
